@@ -87,29 +87,26 @@ help () {
 
 while getopts "ctx:o:vhn:p:" OPT; do
     case $OPT in
-        h)
-            help; exit 0 ;;
-        v)
-            echo "$0 script version: $G_VERSION"; exit 0 ;;
-        k) F_OUT_TEMP=0 ;;
-        x)
-            if type "$OPTARG" &>/dev/null; then
+        A)  XARGV=(${XARGV[@]} "$OPTARG") ;;
+        c)  F_OUT_COMBINE=1 ;;
+        h)  help; exit 0 ;;
+        k)  F_OUT_TEMP=0 ;;
+        n)  NLIST=(${NLIST[@]} "$OPTARG") ;;
+        o)  F_OUT_NAME=$OPTARG ;;
+        p)  PLIST=(${PLIST[@]} "$OPTARG") ;;
+        v)  echo "$0 script version: $G_VERSION"; exit 0 ;;
+        x)  if type "$OPTARG" &>/dev/null; then
                 F_CMD=$OPTARG
             else
                 echo "$0: error: $OPTARG is not in $PATH." 1>&2
                 exit 1
             fi
             ;;
-        o) F_OUT_NAME=$OPTARG ;;
-        n) NLIST=(${NLIST[@]} "$OPTARG") ;;
-        p) PLIST=(${PLIST[@]} "$OPTARG") ;;
-        c) F_OUT_COMBINE=1 ;;
-        A) XARGV=(${XARGV[@]} "$OPTARG") ;;
     esac
 done
 
 if [[ ${#NLIST[@]} -eq 0 && ${#PLIST[@]} -eq 0 ]]; then
-    echo "No packages or bug#s specified."
+    echo "No packages or bug#s specified. Specify -h for usage information."
     exit 0
 fi
 
