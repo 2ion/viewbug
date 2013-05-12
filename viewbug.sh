@@ -143,10 +143,14 @@ done
 if [[ $F_OUT_COMBINE = 1 ]]; then
     CAB="combined-${G_FILEKEY}.mbox"
     cat *$G_FILEKEY* > $CAB
-    FILE=$CAB eval $F_CMD
+    if ! FILE=$CAB eval $F_CMD; then
+        echo "Error: failed to execute $F_CMD on $CAB."
+    fi
 else
     for mbox in *$G_FILEKEY*; do
-        FILE=$mbox eval $F_CMD
+        if ! FILE=$mbox eval $F_CMD; then
+            echo "Error failed to execute $F_CMD on $mbox:"
+        fi
     done
 fi
 
