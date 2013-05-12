@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-G_VERSION=0.1-rc
+G_VERSION=0.1
 G_FILEKEY=$$
 G_TMP=$(mktemp)
 
