@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-G_VERSION=0.1
+G_VERSION=0.2
 G_FILEKEY=$$
 
 F_CMD='mutt -f $FILE'
@@ -132,4 +132,4 @@ fi
 
 # clean up
 
-[[ $F_OUT_TEMP = 1 ]] && rm ./*-$G_FILEKEY*
+[[ $F_OUT_TEMP = 1 ]] && rm ./*$G_FILEKEY*
