@@ -91,7 +91,7 @@ while getopts "ctx:o:vhn:p:" OPT; do
         h)
             help; exit 0 ;;
         v)
-            echo "$0 script version: $G_VERSION" ;;
+            echo "$0 script version: $G_VERSION"; exit 0 ;;
         k) F_OUT_TEMP=0 ;;
         x)
             if type "$OPTARG" &>/dev/null; then
