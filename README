@@ -5,7 +5,7 @@ This script downloads bug reports by number or package from
 bugs.debian.org in MBOX format and displays the retrieved files
 using any compatible MBOX reader, defaulting to mutt.
 
-It uses the commands bash, wget, tr, mktemp, grep, mutt and
+It uses the commands bash, wget, tr, grep, mutt and
 apt-listbugs.
 
 This project's homepage is at <https://github.com/2ion/viewbug>.
