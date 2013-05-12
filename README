@@ -8,7 +8,7 @@ using any compatible MBOX reader, defaulting to mutt.
 It uses the commands bash, wget, tr, mktemp, grep, mutt and
 apt-listbugs.
 
-This project's homepage is at <https://github.com/2ion/viewbugs>.
+This project's homepage is at <https://github.com/2ion/viewbug>.
 
 Usage
 =====
@@ -51,9 +51,9 @@ Usage
         -c
             Combine all retrieved bug reports into a single MBOX file.
         
-       -h   
+        -h   
             Print this short synopsis.
-       -v  
+        -v  
             Print the version.
 
 LICENSE
