@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-G_VERSION=0.2
+G_VERSION=0.3
 G_FILEKEY="$$$RANDOM"
 
 F_CMD='mutt -f $FILE'
@@ -58,13 +58,14 @@ help () {
             May be specified multiple times.
             Refer to apt-listbugs(1) for more information.
 
+        -c
+            Combine all retrieved bug reports into a single MBOX file.
+
+        -h   
+            Print this short synopsis.
+ 
         -k
             Keep the MBOX files with the retrieved bug reports.
-
-        -x COMMAND
-            Use COMMAND as the MBOX reader. $FILE in COMMAND will
-            be replaced with the path of the file to be displayed.
-            Defaults to "mutt -f $FILE".
 
         -o NAME-TEMPLATE
             Set the template used for the generation of the output
@@ -75,14 +76,14 @@ help () {
             $G_FILEKEY, because it is used for globbing.
             Defaults to "$BUGNO-$G_FILEKEY.mbox".
 
-        -c
-            Combine all retrieved bug reports into a single MBOX file.
-        
-       -h   
-            Print this short synopsis.
-       -v  
+       
+        -v  
             Print the version.
-'
+
+        -x COMMAND
+            Use COMMAND as the MBOX reader. $FILE in COMMAND will
+            be replaced with the path of the file to be displayed.
+            Defaults to "mutt -f $FILE".'
 }
 
 while getopts "ctx:o:vhn:p:" OPT; do
