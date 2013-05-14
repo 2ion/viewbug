@@ -86,6 +86,8 @@ help () {
             Defaults to "mutt -f $FILE".'
 }
 
+# option parsing
+
 while getopts "ctx:o:vhn:p:" OPT; do
     case $OPT in
         A)  XARGV=(${XARGV[@]} "$OPTARG") ;;
@@ -110,6 +112,8 @@ if [[ ${#NLIST[@]} -eq 0 && ${#PLIST[@]} -eq 0 ]]; then
     echo "No packages or bug#s specified. Specify -h for usage information."
     exit 0
 fi
+
+# retrieve mbox files
 
 for n in ${NLIST[@]}; do
     BUGNO=$n
@@ -137,6 +141,8 @@ for p in ${PLIST[@]}; do
         done
     fi
 done
+
+# display mbox files
 
 if [[ $F_OUT_COMBINE = 1 ]]; then
     CAB="combined-${G_FILEKEY}.mbox"
