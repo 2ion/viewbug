@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 G_VERSION=0.3
-G_FILEKEY="$$$RANDOM"
+G_FILEKEY=$$
 
 F_CMD='mutt -f $FILE'
 F_OUT_NAME='$BUGNO-$G_FILEKEY.mbox'
