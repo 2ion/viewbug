@@ -31,22 +31,10 @@ Usage
             May be specified multiple times.
             Refer to apt-listbugs(1) for more information.
 
-        -k
-            Keep the MBOX files with the retrieved bug reports.
-
         -x COMMAND
             Use COMMAND as the MBOX reader. $FILE in COMMAND will
             be replaced with the path of the file to be displayed.
             Defaults to "mutt -f $FILE".
-
-        -o NAME-TEMPLATE
-            Set the template used for the generation of the output
-            MBOX files. If $BUGNO or $G_FILEKEY occur, they will
-            expand to the current bug's number and an integer, the
-            value of which is unique for each instance.
-            NAME-TEMPLATE **MUST** contain at least one instance of
-            $G_FILEKEY, because it is used for globbing.
-            Defaults to "$BUGNO-$G_FILEKEY.mbox".
 
         -c
             Combine all retrieved bug reports into a single MBOX file.
