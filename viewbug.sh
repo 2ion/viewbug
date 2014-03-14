@@ -16,12 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-G_VERSION=0.3
+G_VERSION=4
 G_FILEKEY=$$
+G_TMPDIR=$(mktemp -d)
 
 F_CMD='mutt -f $FILE'
-F_OUT_NAME='$BUGNO-$G_FILEKEY.mbox'
-F_OUT_TEMP=1
+F_OUT_NAME="$G_TMPDIR/\$BUGNO-$G_FILEKEY.mbox"
 F_OUT_COMBINE=0
 
 declare -a NLIST
@@ -63,20 +63,7 @@ help () {
 
         -h   
             Print this short synopsis.
- 
-        -k
-            Keep the MBOX files with the retrieved bug reports.
-
-        -o NAME-TEMPLATE
-            Set the template used for the generation of the output
-            MBOX files. If $BUGNO or $G_FILEKEY occur, they will
-            expand to the current bug number and an integer, the
-            value of which is unique for each instance.
-            NAME-TEMPLATE **MUST** contain at least one instance of
-            $G_FILEKEY, because it is used for globbing.
-            Defaults to "$BUGNO-$G_FILEKEY.mbox".
-
-       
+      
         -v  
             Print the version.
 
@@ -86,16 +73,20 @@ help () {
             Defaults to "mutt -f $FILE".'
 }
 
-# option parsing
+cleanup () {
+  echo -n "Removing temporary files ($G_TMPDIR) ... "
+  rm -rf $G_TMPDIR &>/dev/null && echo OK || echo "FAILED"
+}
 
-while getopts "ctx:o:vhn:p:" OPT; do
+trap cleanup EXIT
+trap cleanup SIGTERM
+
+while getopts "A:cx:vhn:p:" OPT; do
     case $OPT in
         A)  XARGV=(${XARGV[@]} "$OPTARG") ;;
         c)  F_OUT_COMBINE=1 ;;
         h)  help; exit 0 ;;
-        k)  F_OUT_TEMP=0 ;;
         n)  NLIST=(${NLIST[@]} "$OPTARG") ;;
-        o)  F_OUT_NAME=$OPTARG ;;
         p)  PLIST=(${PLIST[@]} "$OPTARG") ;;
         v)  echo "$0 script version: $G_VERSION"; exit 0 ;;
         x)  if type "$OPTARG" &>/dev/null; then
@@ -145,19 +136,15 @@ done
 # display mbox files
 
 if [[ $F_OUT_COMBINE = 1 ]]; then
-    CAB="combined-${G_FILEKEY}.mbox"
-    cat *$G_FILEKEY* > $CAB
+    CAB="$(mktemp)"
+    cat $G_TMPDIR/* > $CAB
     if ! FILE=$CAB eval $F_CMD; then
         echo "Error: failed to execute $F_CMD on $CAB."
     fi
 else
-    for mbox in *$G_FILEKEY*; do
+  for mbox in $G_TMPDIR/* ; do
         if ! FILE=$mbox eval $F_CMD; then
             echo "Error failed to execute $F_CMD on $mbox:"
         fi
     done
 fi
-
-# clean up
-
-[[ $F_OUT_TEMP = 1 ]] && rm ./*$G_FILEKEY*
