@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # viewbug.sh - CLI for reading Debian bug reports
-# Copyright (C) 2013 Jens Oliver John <asterisk@2ion.de>
+# Copyright (C) 2013-2014 Jens Oliver John <asterisk@2ion.de>
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ declare -a XARGV
 
 help () {
     echo '
-    viewbugs.sh - Copyright (C) 2013 Jens Oliver John
+    viewbugs.sh - Copyright (C) 2013-2014 Jens Oliver John
     This program comes with ABSOLUTELY NO WARRANTY. This is free
     software, and you are welcome to redistribute it under certain
     conditions. Refer to the LICENSE file in the distribution for
