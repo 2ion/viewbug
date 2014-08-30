@@ -1,5 +1,5 @@
-viewbug.sh - CLI for reading Debian bug reports
-===============================================
+viewbug - CLI for reading Debian bug reports
+============================================
 
 This script downloads bug reports by number or package from
 bugs.debian.org in MBOX format and displays the retrieved files
@@ -13,36 +13,40 @@ This project's homepage is at <https://github.com/2ion/viewbug>.
 Usage
 =====
 
-    viewbugs.sh [OPTIONS] <BUGLIST>
+      viewbugs.sh [OPTIONS] <BUGLIST>
 
-    <BUGLIST> is a list of instances of the two options
+      <BUGLIST> is a list of instances of the two options
 
-        -n BUG#
-        -p PKG[/version]
+          -n BUG#
+          -p PKG[/version]
 
-    which refer to a bug by number or to all bugs of a package
-    respectively. BUG# has to be an integer. PKG is a package name,
-    optionally refering to a specific package version.
+      which refer to a bug by number or to all bugs of a package
+      respectively. BUG# has to be an integer. PKG is a package
+      name, optionally refering to a specific package version.
+      
+      If the argument to either option is equal to @, we take
+      the bug#/package name from the X11 primary selection instead.
 
-    Options:
+  Options:
 
-        -A ARG
-            Add an extra argument ARG when calling apt-listbugs.
-            May be specified multiple times.
-            Refer to apt-listbugs(1) for more information.
+      -A ARG
+          Add an extra argument ARG when calling apt-listbugs.
+          May be specified multiple times.
+          Refer to apt-listbugs(1) for more information.
 
-        -x COMMAND
-            Use COMMAND as the MBOX reader. $FILE in COMMAND will
-            be replaced with the path of the file to be displayed.
-            Defaults to "mutt -f $FILE".
+      -c
+          Combine all retrieved bug reports into a single MBOX file.
 
-        -c
-            Combine all retrieved bug reports into a single MBOX file.
-        
-        -h   
-            Print this short synopsis.
-        -v  
-            Print the version.
+      -h   
+          Print this short synopsis.
+    
+      -v  
+          Print the version.
+
+      -x COMMAND
+          Use COMMAND as the MBOX reader. $FILE in COMMAND will
+          be replaced with the path of the file to be displayed.
+          Defaults to "mutt -f $FILE".
 
 Examples
 ========
@@ -64,18 +68,18 @@ Easy, right?
 LICENSE
 =======
 
-# viewbug.sh - CLI for reading Debian bug reports
-# Copyright (C) 2013-2014 Jens Oliver John <asterisk@2ion.de>
-# 
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+viewbug.sh - CLI for reading Debian bug reports
+Copyright (C) 2013-2014 Jens Oliver John <asterisk@2ion.de>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
