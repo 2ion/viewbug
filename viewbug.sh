@@ -28,6 +28,10 @@ declare -a NLIST
 declare -a PLIST
 declare -a XARGV
 
+log () {
+  printf "[%b%s%b] %s\n" '\033[1;31m' "$1" '\033[0m' "$2"
+}
+
 help () {
     echo '
     viewbugs.sh - Copyright (C) 2013-2014 Jens Oliver John
@@ -50,6 +54,9 @@ help () {
         which refer to a bug by number or to all bugs of a package
         respectively. BUG# has to be an integer. PKG is a package
         name, optionally refering to a specific package version.
+        
+        If the argument to either option is equal to '@', we take
+        the bug#/package name from the X11 primary selection instead.
 
     Options:
 
@@ -78,21 +85,37 @@ cleanup () {
   rm -rf $G_TMPDIR &>/dev/null && echo OK || echo "FAILED"
 }
 
+from_clipboard () {
+  local buf
+  if [[ $1 = @ ]] ; then
+    buf=$(xclip -o)
+    if (( $? != 0 )) ; then
+      log "$0" "Clipboard is empty, using the actual argument instead"
+      echo "$1"
+      return
+    fi
+    echo "$buf"
+    return
+  fi
+  echo "$1"
+}
+
+
 trap cleanup EXIT
 trap cleanup SIGTERM
 
-while getopts "A:cx:vhn:p:" OPT; do
+while getopts ":A:cx:vhn:p:" OPT; do
     case $OPT in
         A)  XARGV=(${XARGV[@]} "$OPTARG") ;;
         c)  F_OUT_COMBINE=1 ;;
         h)  help; exit 0 ;;
-        n)  NLIST=(${NLIST[@]} "$OPTARG") ;;
-        p)  PLIST=(${PLIST[@]} "$OPTARG") ;;
-        v)  echo "$0 script version: $G_VERSION"; exit 0 ;;
-        x)  if type "$OPTARG" &>/dev/null; then
+        n)  NLIST=(${NLIST[@]} "$(from_clipboard "$OPTARG")") ;;
+        p)  PLIST=(${PLIST[@]} "$(from_clipboard "$OPTARG")") ;;
+        v)  log "$0" "Script version: $G_VERSION"; exit 0; ;;
+        x)  if type "$(echo "$OPTARG" | cut -d' ' -f1)" &>/dev/null; then
                 F_CMD=$OPTARG
             else
-                echo "$0: error: $OPTARG is not in $PATH." 1>&2
+                log "$0" "Error: $OPTARG is not in \$PATH." 1>&2
                 exit 1
             fi
             ;;
@@ -100,7 +123,7 @@ while getopts "A:cx:vhn:p:" OPT; do
 done
 
 if [[ ${#NLIST[@]} -eq 0 && ${#PLIST[@]} -eq 0 ]]; then
-    echo "No packages or bug#s specified. Specify -h for usage information."
+    log "$0" "No packages or bug#s specified. Specify -h for usage information."
     exit 0
 fi
 
@@ -111,7 +134,7 @@ for n in ${NLIST[@]}; do
     OUTFILE=$(eval echo $F_OUT_NAME)
     wget -q -O "$OUTFILE" "http://bugs.debian.org/cgi-bin/bugreport.cgi?mbox=yes;bug=$n"
     if [[ $(wc -c < "$OUTFILE") -eq 0 ]]; then
-        echo "Error: bug #$n does not exist or could not be retrieved."
+        log "#$n" "Does not exist or could not be retrieved."
         rm "$OUTFILE"
     fi
 done
