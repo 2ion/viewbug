@@ -134,11 +134,11 @@ for n in ${NLIST[@]}; do
     OUTFILE=$(eval echo $F_OUT_NAME)
     wget -q -O "$OUTFILE" "http://bugs.debian.org/cgi-bin/bugreport.cgi?mbox=yes;bug=$n"
     if (( $? != 0 )) ; then
-      log "$0: wget" "Could not retrieve mailbox for bug# $n, skipping."
+      log "#$n" "Could not retrieve mailbox, skipping."
       continue
     fi
     if [[ ! -s $OUTFILE ]]; then
-        log "#$n" "Does not exist or could not be retrieved."
+        log "#$n" "Mailbox is empty, nothing to read."
         rm -f "$OUTFILE"
     fi
 done
@@ -152,8 +152,12 @@ for p in ${PLIST[@]}; do
             BUGNO=$n
             OUTFILE=$(eval echo $F_OUT_NAME)
             wget -q -O "$OUTFILE" "http://bugs.debian.org/cgi-bin/bugreport.cgi?mbox=yes;bug=$n"
-            if [[ $(wc -c < "$OUTFILE") -eq 0 ]]; then
-                echo "Error: bug #$n from package $p could not be retrieved."
+            if (( $? != 0 )) ; then
+              log "$p#$n" "Could not retrieve mailbox, skipping."
+              continue
+            fi
+            if [[ ! -s $OUTFILE ]]; then
+                log "$p#$n" "Mailbox is empty, nothing to read."
                 rm $OUTFILE
             fi
         done
@@ -163,7 +167,7 @@ done
 # display mbox files
 
 if [[ $F_OUT_COMBINE = 1 ]]; then
-    CAB="$(mktemp)"
+    CAB=$(mktemp)
     cat $G_TMPDIR/* > $CAB
     if ! FILE=$CAB eval $F_CMD; then
         echo "Error: failed to execute $F_CMD on $CAB."
