@@ -133,9 +133,13 @@ for n in ${NLIST[@]}; do
     BUGNO=$n
     OUTFILE=$(eval echo $F_OUT_NAME)
     wget -q -O "$OUTFILE" "http://bugs.debian.org/cgi-bin/bugreport.cgi?mbox=yes;bug=$n"
-    if [[ $(wc -c < "$OUTFILE") -eq 0 ]]; then
+    if (( $? != 0 )) ; then
+      log "$0: wget" "Could not retrieve mailbox for bug# $n, skipping."
+      continue
+    fi
+    if [[ ! -s $OUTFILE ]]; then
         log "#$n" "Does not exist or could not be retrieved."
-        rm "$OUTFILE"
+        rm -f "$OUTFILE"
     fi
 done
 
