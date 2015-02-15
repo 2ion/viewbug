@@ -27,6 +27,7 @@ F_OUT_COMBINE=0
 declare -a NLIST
 declare -a PLIST
 declare -a XARGV
+declare -a CLEANUPFILES=("$G_TMPDIR")
 
 log () {
   printf "[%b%s%b] %s\n" '\033[1;31m' "$1" '\033[0m' "$2"
@@ -84,8 +85,10 @@ help () {
 }
 
 cleanup () {
-  echo -n "Removing temporary files ($G_TMPDIR) ... "
-  rm -rf $G_TMPDIR &>/dev/null && echo OK || echo "FAILED"
+  for FILE in "${CLEANUPFILES[@]}" ; do
+    echo -n "Removing temporary file ($FILE) ... "
+    rm -rf $G_TMPDIR &>/dev/null && echo OK || echo "FAILED"
+  done
 }
 
 from_clipboard () {
@@ -102,7 +105,6 @@ from_clipboard () {
   fi
   echo "$1"
 }
-
 
 trap cleanup EXIT
 trap cleanup SIGTERM
@@ -151,6 +153,7 @@ for p in ${PLIST[@]}; do
     BUGLIST=$(apt-listbugs -q ${XARGV[@]} list "$p" | grep -o '#[[:digit:]]\+' | tr -d '#')
     if [[ -z $BUGLIST ]]; then
         echo "No bugs for package $p with current apt-listbugs parameters."
+        exit 0
     else
         for n in $BUGLIST; do
             BUGNO=$n
@@ -172,6 +175,7 @@ done
 
 if [[ $F_OUT_COMBINE = 1 ]]; then
     CAB=$(mktemp)
+    CLEANUPFILES=("${CLEANUPFILES[@]}" "$CAB")
     cat $G_TMPDIR/* > $CAB
     if ! FILE=$CAB eval $F_CMD; then
         echo "Error: failed to execute $F_CMD on $CAB."
