@@ -107,7 +107,7 @@ from_clipboard () {
 trap cleanup EXIT
 trap cleanup SIGTERM
 
-while getopts ":A:cx:vhn:p:" OPT; do
+while getopts ":A:cx:vhn:p:s:" OPT; do
     case $OPT in
         A)  XARGV=(${XARGV[@]} "$OPTARG") ;;
         c)  F_OUT_COMBINE=1 ;;
