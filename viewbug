@@ -70,6 +70,9 @@ help () {
 
         -h   
             Print this short synopsis.
+
+        -s SEVERITY
+            Shorthand for -A'-s SEVERITY'
       
         -v  
             Print the version.
@@ -111,6 +114,7 @@ while getopts ":A:cx:vhn:p:" OPT; do
         h)  help; exit 0 ;;
         n)  NLIST=(${NLIST[@]} "$(from_clipboard "$OPTARG")") ;;
         p)  PLIST=(${PLIST[@]} "$(from_clipboard "$OPTARG")") ;;
+        s)  XARGV=(${XARGV[@]} "-s $OPTARG") ;;
         v)  log "$0" "Script version: $G_VERSION"; exit 0; ;;
         x)  if type "$(echo "$OPTARG" | cut -d' ' -f1)" &>/dev/null; then
                 F_CMD=$OPTARG
