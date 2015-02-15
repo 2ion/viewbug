@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # viewbug.sh - CLI for reading Debian bug reports
 # Copyright (C) 2013-2015 Jens Oliver John <dev@2ion.de>
 # 
@@ -16,9 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-readonly G_VERSION=5
 readonly G_FILEKEY=$$
 readonly G_TMPDIR=$(mktemp -d)
+readonly G_SCRIPT=${0##*/}
 
 F_CMD='mutt -f $FILE'
 F_OUT_NAME="$G_TMPDIR/\$BUGNO-$G_FILEKEY.mbox"
@@ -86,8 +88,8 @@ help () {
 
 cleanup () {
   for FILE in "${CLEANUPFILES[@]}" ; do
-    echo -n "Removing temporary file ($FILE) ... "
-    rm -rf $G_TMPDIR &>/dev/null && echo OK || echo "FAILED"
+    log "$G_SCRIPT" "Removing temporary file ($FILE) ... "
+    rm -rf $G_TMPDIR
   done
 }
 
@@ -109,7 +111,7 @@ from_clipboard () {
 trap cleanup EXIT
 trap cleanup SIGTERM
 
-while getopts ":A:cx:vhn:p:s:" OPT; do
+while getopts ":A:cx:hn:p:s:" OPT; do
     case $OPT in
         A)  XARGV=(${XARGV[@]} "$OPTARG") ;;
         c)  F_OUT_COMBINE=1 ;;
@@ -117,7 +119,6 @@ while getopts ":A:cx:vhn:p:s:" OPT; do
         n)  NLIST=(${NLIST[@]} "$(from_clipboard "$OPTARG")") ;;
         p)  PLIST=(${PLIST[@]} "$(from_clipboard "$OPTARG")") ;;
         s)  XARGV=(${XARGV[@]} "-s $OPTARG") ;;
-        v)  log "$0" "Script version: $G_VERSION"; exit 0; ;;
         x)  if type "$(echo "$OPTARG" | cut -d' ' -f1)" &>/dev/null; then
                 F_CMD=$OPTARG
             else
@@ -125,11 +126,12 @@ while getopts ":A:cx:vhn:p:s:" OPT; do
                 exit 1
             fi
             ;;
+        ?)  log "$G_SCRIPT" "Illegal option: $(eval echo \$$(($OPTIND-1)))" ; exit 1 ;;
     esac
 done
 
 if [[ ${#NLIST[@]} -eq 0 && ${#PLIST[@]} -eq 0 ]]; then
-    log "$0" "No packages or bug#s specified. Specify -h for usage information."
+    log "$G_SCRIPT "No packages or bug#s specified. Specify -h for usage information."
     exit 0
 fi
 
