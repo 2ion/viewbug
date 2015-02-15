@@ -56,11 +56,11 @@ Examples
 
 Get grave bugs for bash and zsh:
 
-    $ viewbug -A'-s grave' -p bash -p zsh
+    $ viewbug -s grave -p bash -p zsh
 
 Get grave bugs for fcitx-mozc in version 1.13.1651.102-2:
 
-    $ viewbug -A'-s grave' -p fcitx-mozc/1.13.1651.102-2
+    $ viewbug -s grave -p fcitx-mozc/1.13.1651.102-2
 
 Get bug number 71231 and bugs in the packages sed and tar:
   
