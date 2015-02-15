@@ -72,7 +72,7 @@ help () {
             Print this short synopsis.
 
         -s SEVERITY
-            Shorthand for -A'-s SEVERITY'
+            Shorthand for -A"-s SEVERITY"
       
         -v  
             Print the version.
