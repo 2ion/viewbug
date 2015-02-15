@@ -77,9 +77,6 @@ help () {
         -s SEVERITY
             Shorthand for -A"-s SEVERITY"
       
-        -v  
-            Print the version.
-
         -x COMMAND
             Use COMMAND as the MBOX reader. $FILE in COMMAND will
             be replaced with the path of the file to be displayed.
