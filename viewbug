@@ -16,9 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-G_VERSION=4
-G_FILEKEY=$$
-G_TMPDIR=$(mktemp -d)
+readonly G_VERSION=4
+readonly G_FILEKEY=$$
+readonly G_TMPDIR=$(mktemp -d)
 
 F_CMD='mutt -f $FILE'
 F_OUT_NAME="$G_TMPDIR/\$BUGNO-$G_FILEKEY.mbox"
