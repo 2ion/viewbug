@@ -95,7 +95,7 @@ from_clipboard () {
   if [[ $1 = @ ]] ; then
     buf=$(xclip -o)
     if (( $? != 0 )) ; then
-      log "$0" "Clipboard is empty, using the actual argument instead"
+      log "$G_SCRIPT" "Clipboard is empty, using the actual argument instead"
       echo "$1"
       return
     fi
